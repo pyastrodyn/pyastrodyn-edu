@@ -1,5 +1,7 @@
 # PyAstroDyn-edu
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24479683.svg)](https://doi.org/10.5281/zenodo.24479683)
+
 Educational astrodynamics in Python.
 
 PyAstroDyn-edu is the companion library of the graduate course in orbital
@@ -8,6 +10,18 @@ mechanics of the Technical University of Munich (TUM), Chair of Astrodynamics.
 > **Provided as is.** The software is given as is, without warranty of any
 > kind (see the file `LICENSE`). Installation and use are not supported: the
 > author does not provide help with installing or using it.
+
+## Where to find it
+
+| What | Where |
+|---|---|
+| Everything: code, example problems, notebooks, getting-started guide, tests | GitHub: <https://github.com/pyastrodyn/pyastrodyn-edu> |
+| The library alone, to install with `pip install pyastrodyn-edu` | PyPI: <https://pypi.org/project/pyastrodyn-edu/> |
+| Archived versions and DOI, to cite it | Zenodo: <https://doi.org/10.5281/zenodo.24479683> |
+
+To learn with the example problems and the notebooks, download the whole
+project from GitHub (see `docs/getting_started.md`): the package on PyPI
+contains only the library.
 
 ## Purpose and scope
 
@@ -56,8 +70,15 @@ Their statements and results are also in `docs/problems.md`.
 Linux, from installing Python and Visual Studio Code to running a first
 example and a first notebook.
 
-In short: Python 3.11 or newer is required. From the folder that contains
-this file:
+In short: Python 3.11 or newer is required. To install only the library,
+from PyPI:
+
+```
+pip install pyastrodyn-edu
+```
+
+To work with the whole project downloaded from GitHub, from the folder that
+contains this file:
 
 ```
 pip install -e .
@@ -270,7 +291,7 @@ The library is an independent implementation, written from the mathematics.
 The validation problems were written for this library; where a problem says
 "inspired by" a book, the statement and the numbers are not taken from it.
 
-## 8. Licence and reporting mistakes
+## 8. License, citation and reporting mistakes
 
 Copyright © 2026 Dr. Marcello Romano. Released under the MIT License; see the
 file `LICENSE`.
@@ -279,8 +300,15 @@ The software is given as is, for educational purposes, without warranty of
 any kind. Installation and use are not supported. Reports of mistakes are
 welcome: please send them to the author.
 
-The changes from one version to the next are listed in `CHANGELOG.md`. To
-cite the library, see `CITATION.cff`.
+The changes from one version to the next are listed in `CHANGELOG.md`.
+
+To cite the library, use its DOI, which covers all versions:
+
+> Romano, M. (2026). PyAstroDyn-edu: educational astrodynamics in Python
+> [Computer software]. Zenodo. <https://doi.org/10.5281/zenodo.24479683>
+
+The citation details are also in `CITATION.cff`; GitHub shows them under
+**Cite this repository**.
 
 ## 9. Use of AI
 

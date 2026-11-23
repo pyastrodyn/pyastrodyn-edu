@@ -6,8 +6,9 @@ authors:
   - family-names: "Romano"
     given-names: "Marcello"
     orcid: "https://orcid.org/0000-0002-6351-6229"
-version: "0.0.9"
+version: "0.0.10"
 date-released: "2026-11-23"
+doi: "10.5281/zenodo.24479683"
 license: MIT
 repository-code: "https://github.com/pyastrodyn/pyastrodyn-edu"
 abstract: >-

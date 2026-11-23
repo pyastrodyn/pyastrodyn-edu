@@ -26,4 +26,4 @@ from .twobody import *  # noqa: F401,F403
 from .units import *  # noqa: F401,F403
 
 # --- Version -----------------------------------------------------------------
-__version__ = "0.0.9"
+__version__ = "0.0.10"

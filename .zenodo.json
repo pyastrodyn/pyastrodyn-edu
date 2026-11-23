@@ -1,0 +1,18 @@
+{
+  "upload_type": "software",
+  "title": "PyAstroDyn-edu: educational astrodynamics in Python",
+  "description": "Companion library of a graduate course in orbital mechanics: readable Python functions for the two-body problem, with example problems, notebooks and tests. © 2026 Dr. Marcello Romano. Released under the MIT License.",
+  "creators": [
+    {
+      "name": "Romano, Marcello",
+      "orcid": "0000-0002-6351-6229"
+    }
+  ],
+  "license": "MIT",
+  "keywords": [
+    "astrodynamics",
+    "orbital mechanics",
+    "education",
+    "Python"
+  ]
+}
