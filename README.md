@@ -2,6 +2,8 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24479683.svg)](https://doi.org/10.5281/zenodo.24479683)
 
+![Typical Earth orbits computed with pyastrodyn-edu](https://raw.githubusercontent.com/pyastrodyn/pyastrodyn-edu/main/docs/thumbnail.png)
+
 Educational astrodynamics in Python.
 
 PyAstroDyn-edu is the companion library of the graduate course in orbital

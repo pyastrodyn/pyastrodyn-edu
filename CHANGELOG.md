@@ -10,6 +10,8 @@ Function names may still change before version 0.1.0.
 - `.zenodo.json` added, so that Zenodo takes the author with ORCID, the license
   and the keywords from it.
 - "Licence" spelled "license" throughout, as in the MIT License.
+- README: a picture of typical Earth orbits computed with the library
+  (`docs/thumbnail.png`, made by `tools/make_thumbnail.py`).
 - No change of the functions.
 
 ## 0.0.9 (November 2026)
