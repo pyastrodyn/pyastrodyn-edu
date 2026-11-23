@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "PyAstroDyn-edu: educational astrodynamics in Python"
+type: software
+authors:
+  - family-names: "Romano"
+    given-names: "Marcello"
+    orcid: "https://orcid.org/0000-0002-6351-6229"
+version: "0.0.9"
+date-released: "2026-11-23"
+license: MIT
+repository-code: "https://github.com/pyastrodyn/pyastrodyn-edu"
+abstract: >-
+  Companion library of the graduate course in orbital mechanics of the
+  Technical University of Munich: readable Python functions for the two-body
+  problem, with example problems and tests.
+keywords:
+  - astrodynamics
+  - orbital mechanics
+  - education

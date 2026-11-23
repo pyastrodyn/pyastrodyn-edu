@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyastrodyn-edu"
+version = "0.0.9"
+description = "Educational astrodynamics in Python: companion library of a graduate course in orbital mechanics"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Marcello Romano" }]
+dependencies = ["numpy>=1.26", "scipy>=1.11"]
+
+[project.urls]
+Repository = "https://github.com/pyastrodyn/pyastrodyn-edu"
+Changelog = "https://github.com/pyastrodyn/pyastrodyn-edu/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+plot = ["matplotlib>=3.8"]
+time = ["astropy>=6.0"]
+sgp4 = ["sgp4>=2.20"]
+dev = ["pytest>=8", "matplotlib>=3.8", "nbformat>=5", "nbclient>=0.10", "ipykernel>=6", "sgp4>=2.20", "astropy>=6.0"]
+
+[tool.setuptools]
+packages = ["pyastrodyn_edu"]
+
+[tool.setuptools.package-data]
+pyastrodyn_edu = ["data/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
