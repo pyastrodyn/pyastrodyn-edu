@@ -289,7 +289,9 @@ the requirements and the physics, and directed and reviewed the work; an AI
 assistant (Claude, Anthropic) wrote the code, the documentation, the example
 problems and the notebooks. The physics is checked by automatic tests,
 including validation problems solved by two independent methods. The author
-takes responsibility for the result. It may still contain mistakes.
+decided and reviewed all of its content; as stated in the license, it is
+provided as is, without warranty or liability. It may still contain mistakes;
+please report them to the author.
 
 ## Author
 
