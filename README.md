@@ -120,9 +120,6 @@ r_N, v_N = ad.propagate_kepler_rv(r_N, v_N, T / 4.0, mu)
 ```python
 # A prograde burn of 0.1 km/s, given in Hill components (radial, transverse, normal)
 v_N = ad.apply_impulse(r_N, v_N, [0.0, 0.1, 0.0])
-
-# Hohmann transfer between two circular orbits
-dv1, dv2, tof = ad.hohmann(6678.0, 42164.0, mu)
 ```
 
 Every function has a documentation string; in Jupyter, type `ad.coe2rv?`.
@@ -253,7 +250,7 @@ checked, the equivalent in each tool.
 | 3 | Elliptical and circular orbits, period, geosynchronous orbit; scaling | `conics`, `anomalies`, `units` |
 | 4 | Mean anomaly, Kepler's equation, position as a function of time | `anomalies`, `kepler` |
 | 5 | Rotation matrices, state and orbital elements, equinoctial elements, Lagrange coefficients | `rotations`, `elements`, `lagrange` |
-| 6 | Rocket equation, impulsive burns, burn of finite duration, single-impulse maneuvers, Hohmann and bi-elliptic transfers | `maneuvers` |
+| 6 | Rocket equation, impulsive burns, single-impulse maneuvers, tangential impulses at the apses, Oberth effect, burn of finite duration | `maneuvers` |
 
 Also: `constants`, `plotting`, `validation`, and `single_state`.
 
