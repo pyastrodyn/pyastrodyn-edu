@@ -3,6 +3,13 @@
 All notable changes of PyAstroDyn-edu are listed here, the most recent first.
 Function names may still change before version 0.1.0.
 
+## 0.0.12 (November 2026)
+
+- README corrected: the table "What is covered" and the first example no
+  longer present the two-impulse coplanar transfers (Hohmann, bi-elliptic) as
+  part of Lecture 6. They are taught in Lecture 7.
+- No change of the functions and of the example problems.
+
 ## 0.0.11 (November 2026)
 
 - Lecture 6 added, module `maneuvers`: rocket equation, impulsive burns,
