@@ -40,9 +40,10 @@ What this means in practice:
   and in which lecture it is taught. The code is commented step by step, and
   the hardest algorithms also exist in a single-state version meant for a
   first reading (section 6).
-- **Stated models.** This version covers Lectures 1 to 5. Keplerian motion
+- **Stated models.** This version covers Lectures 1 to 6. Keplerian motion
   is that of the ideal two-body problem: no perturbations there (no J2, no
   drag, no third body).
+  The maneuvers are impulsive burns in that same ideal problem.
 - **Stated tolerances.** Closed-form functions are accurate to floating-point
   rounding. The iterative and numerical ones (the solver of Kepler's equation
   and the integrators) state their tolerance and their measured accuracy in
@@ -114,6 +115,14 @@ a, e, i, raan, argp, f = ad.rv2coe(r_N, v_N, mu)
 # Period, and the state a quarter of a period later (Kepler's equation)
 T = ad.period(a, mu)
 r_N, v_N = ad.propagate_kepler_rv(r_N, v_N, T / 4.0, mu)
+```
+
+```python
+# A prograde burn of 0.1 km/s, given in Hill components (radial, transverse, normal)
+v_N = ad.apply_impulse(r_N, v_N, [0.0, 0.1, 0.0])
+
+# Hohmann transfer between two circular orbits
+dv1, dv2, tof = ad.hohmann(6678.0, 42164.0, mu)
 ```
 
 Every function has a documentation string; in Jupyter, type `ad.coe2rv?`.
@@ -244,6 +253,7 @@ checked, the equivalent in each tool.
 | 3 | Elliptical and circular orbits, period, geosynchronous orbit; scaling | `conics`, `anomalies`, `units` |
 | 4 | Mean anomaly, Kepler's equation, position as a function of time | `anomalies`, `kepler` |
 | 5 | Rotation matrices, state and orbital elements, equinoctial elements, Lagrange coefficients | `rotations`, `elements`, `lagrange` |
+| 6 | Rocket equation, impulsive burns, burn of finite duration, single-impulse maneuvers, Hohmann and bi-elliptic transfers | `maneuvers` |
 
 Also: `constants`, `plotting`, `validation`, and `single_state`.
 
@@ -275,11 +285,14 @@ independent method.
 
 **Notebooks.** `notebooks/` contains Jupyter notebooks by lecture: Lecture 1
 (numerical integration and its accuracy).
+Lecture 6 (maneuvers).
 
 **Example problems as notebook and script.** `examples/lectureNN/` contains,
 for each example problem, a script and the notebook made from it by
 `tools/make_examples.py`; see Step 11 of `docs/getting_started.md`. The list
 is in `examples/README.md`.
+From Lecture 6 on, the example problems use the data of the examples on the
+lecture slides.
 
 ## 7. Books cited
 

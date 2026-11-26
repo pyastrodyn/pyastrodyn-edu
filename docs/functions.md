@@ -38,6 +38,16 @@ ends with a link back to this map.
 </table>
 
 <table>
+<tr><th colspan="4" align="left">Part 2: maneuvers</th></tr>
+<tr>
+<td align="center" width="170"><a href="#maneuvers"><b>maneuvers</b></a><br>Lecture 6<br>13 functions</td>
+<td width="170"></td>
+<td width="170"></td>
+<td width="170"></td>
+</tr>
+</table>
+
+<table>
 <tr><th colspan="4" align="left">Support, used in every lecture</th></tr>
 <tr>
 <td align="center" width="170"><a href="#constants"><b>constants</b></a><br>Values for the Earth<br>5 constants</td>
@@ -51,7 +61,7 @@ ends with a link back to this map.
 <tr><th colspan="4" align="left">For reading and checking</th></tr>
 <tr>
 <td align="center" width="170"><a href="#single_state"><b>single_state</b></a><br>The hardest algorithms, for one state<br>3 functions</td>
-<td align="center" width="170"><a href="#validation"><b>validation</b></a><br>The validation problems<br>16 problems</td>
+<td align="center" width="170"><a href="#validation"><b>validation</b></a><br>The validation problems<br>26 problems</td>
 <td width="170"></td>
 <td width="170"></td>
 </tr>
@@ -70,11 +80,12 @@ Which modules each one uses:
 | Part 1, Lectures 1 to 5: the two-body problem | [`rotations`](#rotations) | Lecture 5 | 8 | none |
 | Part 1, Lectures 1 to 5: the two-body problem | [`elements`](#elements) | Lecture 5 | 4 | `rotations` |
 | Part 1, Lectures 1 to 5: the two-body problem | [`lagrange`](#lagrange) | Lecture 5 | 2 | none |
+| Part 2: maneuvers | [`maneuvers`](#maneuvers) | Lecture 6 | 13 | `conics`, `rotations` |
 | Support, used in every lecture | [`constants`](#constants) | Values for the Earth | 5 constants | none |
 | Support, used in every lecture | [`units`](#units) | Lecture 3, scaling | 1 class | none |
 | Support, used in every lecture | [`plotting`](#plotting) | Figures of an orbit | 2 | `conics` |
 | For reading and checking | [`single_state`](#single_state) | The hardest algorithms, for one state | 3 | none |
-| For reading and checking | [`validation`](#validation) | The validation problems | 4 | all the computing modules |
+| For reading and checking | [`validation`](#validation) | The validation problems | 5 | all the computing modules |
 
 ---
 
@@ -1330,6 +1341,365 @@ Lecture 5, Lagrange coefficients.
 
 ---
 
+## maneuvers
+
+File `pyastrodyn_edu/maneuvers.py`. Lecture 6. [Back to the map](#map-of-the-library).
+
+Maneuvers 1: rocket equation, impulsive burns, coplanar transfers.
+
+Any consistent unit system; angles in radians. Every scalar argument may be
+one value or an array of n values; vectors have shape (3,) or (n, 3).
+
+Sign convention for transfers: a positive velocity change is along the
+velocity (prograde), a negative one against it (retrograde). The cost of a
+maneuver is the sum of the absolute values.
+
+| Function | What it does |
+|---|---|
+| [`exhaust_velocity`](#exhaust_velocity) | Effective exhaust velocity from the specific impulse, v_e = Isp g0. |
+| [`rocket_dv`](#rocket_dv) | Velocity change from the Tsiolkovsky rocket equation, dv = v_e ln(m0/mf). |
+| [`mass_ratio`](#mass_ratio) | Initial-to-final mass ratio for a velocity change, m0/mf = exp(dv / v_e). |
+| [`propellant_mass`](#propellant_mass) | Propellant mass burnt to obtain a velocity change, starting from mass m0. |
+| [`apply_impulse`](#apply_impulse) | Velocity just after an impulsive burn given in Hill components. |
+| [`energy_change`](#energy_change) | Change of specific energy caused by an impulsive velocity change. |
+| [`apse_change_dv`](#apse_change_dv) | Tangential velocity change at one apse that moves the opposite apse. |
+| [`single_impulse_dv`](#single_impulse_dv) | Magnitude of the velocity change between two coplanar orbits at a common point. |
+| [`orbits_intersect`](#orbits_intersect) | Whether two coplanar elliptical orbits have a common point. |
+| [`hohmann`](#hohmann) | Hohmann transfer between two coplanar circular orbits. |
+| [`bielliptic`](#bielliptic) | Bi-elliptic transfer between two coplanar circular orbits. |
+| [`hohmann_vs_bielliptic`](#hohmann_vs_bielliptic) | Total cost of the Hohmann and of the bi-elliptic transfer, made dimensionless. |
+| [`finite_burn`](#finite_burn) | State at the end of a burn of finite duration, thrust along the velocity. |
+
+### exhaust_velocity
+
+`exhaust_velocity(isp, g0)`
+
+Effective exhaust velocity from the specific impulse, v_e = Isp g0.
+
+**Parameters**
+
+- `isp` (specific impulse, in seconds)
+- `g0` (standard acceleration of gravity, in the chosen units)
+  (`constants.G0` is in km/s^2)
+
+**References**
+
+Curtis, *Orbital Mechanics for Engineering Students*.
+Lecture 6, the rocket equation.
+
+### rocket_dv
+
+`rocket_dv(ve, m0, mf)`
+
+Velocity change from the Tsiolkovsky rocket equation, dv = v_e ln(m0/mf).
+
+**Parameters**
+
+- `ve` (effective exhaust velocity)
+- `m0` (mass before the burn)
+- `mf` (mass after the burn)
+
+**References**
+
+Curtis, *Orbital Mechanics for Engineering Students*.
+Lecture 6, the rocket equation.
+
+**Notes**
+
+Ideal rocket: no gravity or drag losses, constant exhaust velocity.
+
+### mass_ratio
+
+`mass_ratio(dv, ve)`
+
+Initial-to-final mass ratio for a velocity change, m0/mf = exp(dv / v_e).
+
+**References**
+
+Curtis, *Orbital Mechanics for Engineering Students*.
+Lecture 6, the rocket equation.
+
+### propellant_mass
+
+`propellant_mass(dv, ve, m0)`
+
+Propellant mass burnt to obtain a velocity change, starting from mass m0.
+
+**Returns**
+
+- m0 (1 - exp(-|dv| / v_e))
+
+**References**
+
+Curtis, *Orbital Mechanics for Engineering Students*.
+Lecture 6, the rocket equation.
+
+### apply_impulse
+
+`apply_impulse(r_N, v_N, dv_H)`
+
+Velocity just after an impulsive burn given in Hill components.
+
+In the impulsive approximation the position does not change during the
+burn and the velocity jumps by the velocity change.
+
+**Parameters**
+
+- `r_N, v_N` (ndarray, shape (3,) or (n, 3))
+  Position and velocity just before the burn, components in N.
+- `dv_H` (ndarray, shape (3,) or (n, 3))
+  Velocity change, components in the Hill basis of the orbit before the
+  burn: radial, transverse, normal.
+
+**Returns**
+
+- `v_N` (ndarray, shape (3,) or (n, 3))
+  Velocity just after the burn, components in N.
+
+**References**
+
+Schaub and Junkins, *Analytical Mechanics of Space Systems*; Vallado,
+*Fundamentals of Astrodynamics and Applications*.
+Lecture 6, the impulsive approximation.
+
+### energy_change
+
+`energy_change(v_N, dv_N)`
+
+Change of specific energy caused by an impulsive velocity change.
+
+**Parameters**
+
+- `v_N` (ndarray, shape (3,) or (n, 3))
+  Velocity just before the burn.
+- `dv_N` (ndarray, shape (3,) or (n, 3))
+  Velocity change, components in the same basis.
+
+**Returns**
+
+- v . dv + |dv|^2 / 2
+
+**References**
+
+Curtis, *Orbital Mechanics for Engineering Students*.
+Lecture 6, where to burn: the Oberth effect.
+
+**Notes**
+
+The first term grows with the speed at the burn point: the same velocity
+change adds more energy where the spacecraft is fastest.
+
+### apse_change_dv
+
+`apse_change_dv(r_burn, r_opposite_old, r_opposite_new, mu)`
+
+Tangential velocity change at one apse that moves the opposite apse.
+
+**Parameters**
+
+- `r_burn` (radius of the apse where the burn takes place (it does not change))
+- `r_opposite_old` (radius of the opposite apse before the burn)
+- `r_opposite_new` (radius of the opposite apse after the burn)
+- `mu` (gravitational parameter)
+
+**Returns**
+
+- Signed velocity change: positive (prograde) raises the opposite apse.
+
+**References**
+
+Curtis, *Orbital Mechanics for Engineering Students*.
+Lecture 6, raising and lowering the apses.
+
+### single_impulse_dv
+
+`single_impulse_dv(v1, v2, delta_gamma)`
+
+Magnitude of the velocity change between two coplanar orbits at a common point.
+
+**Parameters**
+
+- `v1, v2` (speeds on the two orbits at the common point)
+- `delta_gamma` (difference of the two flight-path angles there, radians)
+
+**Returns**
+
+- sqrt(v1^2 + v2^2 - 2 v1 v2 cos(delta_gamma))   (the velocity triangle)
+
+**References**
+
+Curtis, *Orbital Mechanics for Engineering Students*.
+Lecture 6, general single impulse: the velocity triangle.
+
+### orbits_intersect
+
+`orbits_intersect(a1, e1, argp1, a2, e2, argp2, tol=1e-12)`
+
+Whether two coplanar elliptical orbits have a common point.
+
+A single impulse can move a spacecraft from one orbit to another only at a
+point that belongs to both.
+
+**Parameters**
+
+- `a1, e1, argp1` (semi-major axis, eccentricity and argument of periapsis of)
+  the first orbit
+- `a2, e2, argp2` (the same for the second orbit)
+- `tol` (relative tolerance, so that tangent orbits count as intersecting)
+
+**Returns**
+
+- bool, or an array of bool
+
+**References**
+
+Curtis, *Orbital Mechanics for Engineering Students*.
+Lecture 6, single-impulse maneuvers: which orbits can be reached.
+
+**Notes**
+
+Both orbits must lie in the same plane and be ellipses (e < 1). Equating
+the two orbit equations at the same angle theta gives
+`A cos(theta) + B sin(theta) = C`, which has a solution if and only if
+`|C| <= sqrt(A^2 + B^2)`.
+
+### hohmann
+
+`hohmann(r1, r2, mu)`
+
+Hohmann transfer between two coplanar circular orbits.
+
+**Parameters**
+
+- `r1` (radius of the initial orbit)
+- `r2` (radius of the final orbit (larger or smaller than r1))
+- `mu` (gravitational parameter)
+
+**Returns**
+
+- `dv1, dv2` (signed velocity changes of the first and second burn)
+- `tof` (transfer time, half the period of the transfer ellipse)
+
+**References**
+
+Curtis, *Orbital Mechanics for Engineering Students*; Vallado,
+*Fundamentals of Astrodynamics and Applications*.
+Lecture 6, coplanar transfers.
+
+**Notes**
+
+Both burns are prograde for an outward transfer (r2 > r1) and retrograde
+for an inward one. Total cost: `abs(dv1) + abs(dv2)`.
+
+### bielliptic
+
+`bielliptic(r1, r2, rb, mu)`
+
+Bi-elliptic transfer between two coplanar circular orbits.
+
+Three tangential burns: at r1 onto a first ellipse with apoapsis rb; at rb
+onto a second ellipse with periapsis r2; at r2 to circularise.
+
+**Parameters**
+
+- `r1` (radius of the initial orbit)
+- `r2` (radius of the final orbit)
+- `rb` (radius of the intermediate apoapsis (rb >= max(r1, r2)))
+- `mu` (gravitational parameter)
+
+**Returns**
+
+- `dv1, dv2, dv3` (signed velocity changes of the three burns)
+- `tof` (transfer time, the sum of the two half periods)
+
+**References**
+
+Curtis, *Orbital Mechanics for Engineering Students*; Vallado,
+*Fundamentals of Astrodynamics and Applications*.
+Lecture 6, coplanar transfers.
+
+**Notes**
+
+For an outward transfer the third burn is retrograde (negative). With
+`rb = r2` the velocity changes reduce to those of the Hohmann transfer
+(`dv3 = 0`); the returned time is then longer than the Hohmann time by
+half a revolution of the final orbit.
+
+### hohmann_vs_bielliptic
+
+`hohmann_vs_bielliptic(radius_ratio, rb_ratio)`
+
+Total cost of the Hohmann and of the bi-elliptic transfer, made dimensionless.
+
+**Parameters**
+
+- `radius_ratio` (r2 / r1, final over initial radius)
+- `rb_ratio` (rb / r1, intermediate apoapsis over initial radius)
+
+**Returns**
+
+- `cost_hohmann, cost_bielliptic` (total velocity change of each transfer,)
+  divided by the circular speed of the initial orbit
+
+**References**
+
+Curtis, *Orbital Mechanics for Engineering Students*; Vallado,
+*Fundamentals of Astrodynamics and Applications*.
+Lecture 6, the bi-elliptic transfer: when it wins.
+
+**Notes**
+
+For a radius ratio below about 11.94 the Hohmann transfer is always
+cheaper; above about 15.58 any bi-elliptic transfer with `rb > r2` is
+cheaper; in between it depends on `rb`.
+
+### finite_burn
+
+`finite_burn(r0_N, v0_N, dv, burn_time, mu, rtol=1e-11)`
+
+State at the end of a burn of finite duration, thrust along the velocity.
+
+The impulsive approximation replaces a burn by a jump of the velocity.
+This function integrates the burn itself: the thrust is in the equation
+of motion, r'' = -mu r / |r|^3 + a_T v / |v|, with a constant thrust
+acceleration a_T = dv / burn_time. Comparing its result with
+`apply_impulse` shows what the impulsive approximation neglects.
+
+**Parameters**
+
+- `r0_N, v0_N` (ndarray, shape (3,))
+  Position and velocity at ignition, components in N. One state only.
+- `dv` (float)
+  Velocity change that the engine delivers, a_T times the burn time.
+  Positive along the velocity, negative against it.
+- `burn_time` (float)
+  Duration of the burn, greater than zero.
+- `mu` (float)
+  Gravitational parameter.
+- `rtol` (float)
+  Relative tolerance of the integration (method DOP853 of SciPy).
+
+**Returns**
+
+- `r_N, v_N` (ndarray, shape (3,))
+  Position and velocity at cutoff, components in N.
+
+**References**
+
+Curtis, *Orbital Mechanics for Engineering Students*; Vallado,
+*Fundamentals of Astrodynamics and Applications*.
+Lecture 6, equation of motion with thrust; finite burn or impulse.
+
+**Notes**
+
+The mass is taken as constant during the burn, so that the thrust
+acceleration is constant; a real engine of constant thrust accelerates
+more towards the end. The thrust follows the direction of the velocity
+during the burn. For `burn_time` much shorter than the orbital period
+the result tends to the impulsive one.
+
+---
+
 ## constants
 
 File `pyastrodyn_edu/constants.py`. Values for the Earth. [Back to the map](#map-of-the-library).
@@ -1614,6 +1984,7 @@ converted to radians inside `solve`.
 | [`expected`](#expected) | The stored expected results of all problems, `{id: {name: value}}`. |
 | [`compare`](#compare) | Compare the results of an example with the stored results of its problem. |
 | [`to_plain`](#to_plain) | Convert results to plain Python numbers, lists, strings and booleans. |
+| [`change_basis_HN`](#change_basis_hn) | Components in the Hill basis of the state (r_N, v_N) of a vector given in N. |
 
 ### Problem
 
@@ -1681,3 +2052,9 @@ nothing is compared: the function says so and returns False.
 `to_plain(results)`
 
 Convert results to plain Python numbers, lists, strings and booleans.
+
+### change_basis_HN
+
+`change_basis_HN(r_N, v_N, vector_N)`
+
+Components in the Hill basis of the state (r_N, v_N) of a vector given in N.

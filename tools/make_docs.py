@@ -27,6 +27,9 @@ MODULES = ["twobody", "conics", "anomalies", "kepler", "rotations", "elements",
            "lagrange"]
 MANEUVER_MODULES = []                                   # the first Part 2 group of the library map (from Lecture 6)
 PERTURBATION_MODULES = []                               # the second Part 2 group (filled from Lecture 9)
+# --- Lecture 6 ---
+MODULES += ["maneuvers"]
+MANEUVER_MODULES += [("maneuvers", "Lecture 6")]
 # --- Modules not tied to one lecture ---
 MODULES += ["units", "plotting", "single_state"]
 

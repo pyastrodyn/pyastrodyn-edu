@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyastrodyn-edu"
-version = "0.0.10"
+version = "0.0.11"
 description = "Educational astrodynamics in Python: companion library of a graduate course in orbital mechanics"
 readme = "README.md"
 requires-python = ">=3.11"

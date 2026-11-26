@@ -294,6 +294,139 @@ def test_lagrange_is_valid_on_a_hyperbola_and_at_half_a_turn():
     assert np.allclose((r_N, v_N), ad.coe2rv(9000.0, 0.2, 0.3, 0.0, 0.0, 0.3 + np.pi, MU))
 
 
+# --- Lecture 6: maneuvers ------------------------------------------------------
+
+
+def test_lecture_6_functions_cite_a_book_and_a_lecture():
+    for name in ad.maneuvers.__all__:
+        doc = inspect.getdoc(getattr(ad.maneuvers, name)) or ""
+        assert "References\n----------" in doc, f"maneuvers.{name}: no References block"
+        block = doc.split("References\n----------\n", 1)[1].split("\n\n", 1)[0]
+        assert "Lecture " in block and "*" in block, f"maneuvers.{name}: no lecture or no book cited"
+
+
+def test_impulse_does_not_modify_its_inputs_and_hohmann_does_not_depend_on_the_units():
+    r_N, v_N, dv_H = np.array([7000.0, 100.0, -50.0]), np.array([0.1, 7.4, 1.0]), np.array([0.01, 0.02, 0.03])
+    copies = r_N.copy(), v_N.copy(), dv_H.copy()
+    ad.apply_impulse(r_N, v_N, dv_H)
+    assert np.array_equal(r_N, copies[0]) and np.array_equal(v_N, copies[1]) and np.array_equal(dv_H, copies[2])
+    canonical = ad.UnitSystem.canonical(MU, 6678.0)
+    dv1, dv2, tof = ad.hohmann(6678.0, 42164.0, MU)
+    dv1_c, dv2_c, tof_c = ad.hohmann(1.0, canonical.nondim(42164.0, "length"), 1.0)
+    assert np.allclose(canonical.dim([dv1_c, dv2_c], "speed"), [dv1, dv2])
+    assert np.isclose(canonical.dim(tof_c, "time"), tof)
+
+
+def test_rocket_equation_round_trip():
+    ve = ad.exhaust_velocity(300.0, ad.G0)
+    assert np.isclose(ve, 2.941995)
+    dv = ad.rocket_dv(ve, 1000.0, 600.0)
+    assert np.isclose(ad.mass_ratio(dv, ve), 1000.0 / 600.0)
+    assert np.isclose(ad.propellant_mass(dv, ve, 1000.0), 400.0)
+    assert np.allclose(ad.propellant_mass(np.array([0.0, dv]), ve, 1000.0), [0.0, 400.0])
+
+
+def test_apply_impulse_in_hill_components():
+    r_N, v_N = ad.coe2rv(9000.0, 0.2, 0.8, 1.0, 2.0, 0.9, MU)
+    C_HN = ad.dcm_HN(r_N, v_N)
+    dv_H = np.array([0.03, -0.05, 0.11])
+    v_new_N = ad.apply_impulse(r_N, v_N, dv_H)
+    assert np.allclose(C_HN @ (v_new_N - v_N), dv_H)
+    dv_N = v_new_N - v_N
+    energy_gain = ad.specific_energy(r_N, v_new_N, MU) - ad.specific_energy(r_N, v_N, MU)
+    assert np.isclose(ad.energy_change(v_N, dv_N), energy_gain)
+    # A purely normal impulse leaves the radial and transverse velocity unchanged.
+    v_normal_N = ad.apply_impulse(r_N, v_N, [0.0, 0.0, 0.2])
+    assert np.allclose((C_HN @ v_normal_N)[:2], (C_HN @ v_N)[:2])
+    # Many states at once.
+    R, V = ad.coe2rv(*random_elliptic_elements(6), MU)
+    many = ad.apply_impulse(R, V, np.tile(dv_H, (6, 1)))
+    assert np.allclose(many[2], ad.apply_impulse(R[2], V[2], dv_H))
+
+
+def test_apse_change_matches_the_states():
+    r_p, r_a, r_a_new = 6700.0, 7200.0, 9000.0
+    dv = ad.apse_change_dv(r_p, r_a, r_a_new, MU)
+    a, e = 0.5 * (r_p + r_a), (r_a - r_p) / (r_a + r_p)
+    r_N, v_N = ad.coe2rv(a, e, 0.4, 0.0, 0.0, 0.0, MU)
+    a_new, e_new, *_ = ad.rv2coe(r_N, ad.apply_impulse(r_N, v_N, [0.0, dv, 0.0]), MU)
+    assert np.isclose(ad.apoapsis_radius(a_new, e_new), r_a_new)
+    assert np.isclose(ad.periapsis_radius(a_new, e_new), r_p)
+    assert ad.apse_change_dv(r_p, r_a, 7000.0, MU) < 0.0
+
+
+def test_hohmann_built_from_states():
+    r1, r2 = 6678.0, 42164.0
+    dv1, dv2, tof = ad.hohmann(r1, r2, MU)
+    r_N, v_N = ad.coe2rv(r1, 0.0, 0.0, 0.0, 0.0, 0.0, MU)
+    v_N = ad.apply_impulse(r_N, v_N, [0.0, dv1, 0.0])
+    a_t, e_t, *_ = ad.rv2coe(r_N, v_N, MU)
+    assert np.isclose(ad.apoapsis_radius(a_t, e_t), r2)
+    assert np.isclose(tof, ad.period(a_t, MU) / 2)
+    r_N, v_N = ad.propagate_kepler_rv(r_N, v_N, tof, MU)
+    v_N = ad.apply_impulse(r_N, v_N, [0.0, dv2, 0.0])
+    a_f, e_f, *_ = ad.rv2coe(r_N, v_N, MU)
+    assert np.isclose(a_f, r2) and e_f < 1e-9
+    # Inward transfer: same magnitudes, opposite signs, reversed order.
+    dv1_in, dv2_in, tof_in = ad.hohmann(r2, r1, MU)
+    assert np.allclose((dv1_in, dv2_in, tof_in), (-dv2, -dv1, tof))
+
+
+def test_bielliptic_reduces_to_hohmann_and_closes_on_the_target():
+    r1, r2, rb = 6800.0, 122400.0, 250000.0
+    # With rb = r2 the velocity changes are those of the Hohmann transfer. The
+    # time is longer by half a revolution of the final orbit, which the
+    # formula still counts as the second "ellipse".
+    dv_h1, dv_h2, tof_h = ad.hohmann(r1, r2, MU)
+    assert np.allclose(ad.bielliptic(r1, r2, r2, MU)[:3], (dv_h1, dv_h2, 0.0))
+    assert np.isclose(ad.bielliptic(r1, r2, r2, MU)[3], tof_h + ad.period(r2, MU) / 2)
+    dv1, dv2, dv3, tof = ad.bielliptic(r1, r2, rb, MU)
+    r_N, v_N = ad.coe2rv(r1, 0.0, 0.0, 0.0, 0.0, 0.0, MU)
+    for dv, half_turn in ((dv1, True), (dv2, True), (dv3, False)):
+        v_N = ad.apply_impulse(r_N, v_N, [0.0, dv, 0.0])
+        if half_turn:
+            r_N, v_N = ad.propagate_lagrange(r_N, v_N, np.pi, MU)
+    a_f, e_f, *_ = ad.rv2coe(r_N, v_N, MU)
+    assert np.isclose(a_f, r2) and e_f < 1e-9
+    assert dv3 < 0.0
+
+
+def test_hohmann_versus_bielliptic_thresholds():
+    far = 1e7  # intermediate apoapsis very far away
+    h, b = ad.hohmann_vs_bielliptic(11.5, far)
+    assert h < b  # below 11.94 Hohmann always wins
+    h, b = ad.hohmann_vs_bielliptic(12.3, far)
+    assert b < h  # above 11.94 a far enough bi-elliptic wins
+    h, b = ad.hohmann_vs_bielliptic(15.0, 15.5)
+    assert h < b  # below 15.58 a short bi-elliptic still loses
+    h, b = ad.hohmann_vs_bielliptic(16.0, 16.5)
+    assert b < h  # above 15.58 any bi-elliptic wins
+    ratios = np.array([2.0, 12.3, 20.0])
+    h, b = ad.hohmann_vs_bielliptic(ratios, far)
+    assert list(b < h) == [False, True, True]
+
+
+def test_orbits_intersect():
+    assert ad.orbits_intersect(7000.0, 0.0, 0.0, 8000.0, 0.2, 0.0)        # crosses the circle
+    assert not ad.orbits_intersect(7000.0, 0.0, 0.0, 12000.0, 0.2, 0.0)   # entirely outside
+    assert ad.orbits_intersect(7000.0, 0.0, 0.0, 8000.0, 0.125, 1.0)      # tangent at periapsis
+    assert ad.orbits_intersect(9000.0, 0.3, 0.2, 9000.0, 0.3, 0.2)        # the same orbit
+    assert ad.orbits_intersect(9000.0, 0.3, 0.0, 9000.0, 0.3, 2.0)        # same shape, turned
+    flags = ad.orbits_intersect(7000.0, 0.0, 0.0, np.array([8000.0, 12000.0]), 0.2, 0.0)
+    assert list(flags) == [True, False]
+
+
+def test_single_impulse_matches_the_vector_difference():
+    r1, a2, e2 = 7000.0, 8000.0, 0.2
+    f2 = np.arccos((ad.semilatus_rectum(a2, e2) / r1 - 1.0) / e2)
+    r2_N, v2_N = ad.coe2rv(a2, e2, 0.0, 0.0, 0.0, f2, MU)
+    _, v1_N = ad.coe2rv(r1, 0.0, 0.0, 0.0, 0.0, f2, MU)
+    assert np.isclose(np.linalg.norm(r2_N), r1)
+    dv = ad.single_impulse_dv(ad.circular_speed(r1, MU), ad.visviva_speed(r1, a2, MU),
+                              ad.flight_path_angle(e2, f2))
+    assert np.isclose(dv, np.linalg.norm(v2_N - v1_N))
+
+
 # --- Units and scaling -------------------------------------------------------
 
 

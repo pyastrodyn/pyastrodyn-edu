@@ -511,3 +511,334 @@ Starting from the state of problem L5-1, find the four Lagrange coefficients for
 **Independent check.** The same state follows from the elements with the true anomaly increased by 90 degrees; the coefficients satisfy F Gdot - G Fdot = 1.
 
 *Inspired by the worked examples in Curtis, *Orbital Mechanics for Engineering Students*. The statement and the numbers were written for this library.*
+
+## Lecture 6
+
+### L6-1. Propellant for an apogee burn
+
+A geostationary satellite has a mass of 3500 kg at separation from the launcher and must provide a velocity change of 1.47 km/s with a storable bipropellant engine of specific impulse 320 s. Find the exhaust velocity, the mass ratio, the propellant burnt and the final mass.
+
+**Given**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `dv` | 1.47 | km/s |
+| `isp` | 320 | s |
+| `m0` | 3500 | kg |
+| `g0` | 0.00980665 | km/s^2 |
+
+**Results**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `exhaust_velocity` | 3.138128 | km/s |
+| `mass_ratio` | 1.597488 | - |
+| `propellant_mass` | 1309.06 | kg |
+| `final_mass` | 2190.94 | kg |
+
+**Worked out in** `examples/lecture06/example_6_1_propellant_mass.ipynb` (notebook) and `examples/lecture06/example_6_1_propellant_mass.py` (script).
+
+**Independent check.** The rocket equation applied to the initial and final mass must return the velocity change.
+
+*Inspired by the worked examples in Curtis, *Orbital Mechanics for Engineering Students*. The statement and the numbers were written for this library.*
+
+### L6-2. A prograde burn at perigee
+
+A spacecraft is at the perigee of an orbit with perigee altitude 300 km and apogee altitude 800 km. It fires its engine along the velocity for a velocity change of 0.1 km/s. Find the new semi-major axis, eccentricity, and perigee and apogee altitudes.
+
+**Given**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `perigee_altitude` | 300 | km |
+| `apogee_altitude` | 800 | km |
+| `dv_H` | [0, 0.1, 0] | km/s |
+| `R` | 6378.137 | km |
+| `mu` | 398600.4418 | km^3/s^2 |
+
+**Results**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `a_new` | 7124.126 | km |
+| `e_new` | 0.06260263 | - |
+| `perigee_altitude_new` | 300 | km |
+| `apogee_altitude_new` | 1191.978 | km |
+
+**Worked out in** `examples/lecture06/example_6_2_prograde_burn_at_perigee.ipynb` (notebook) and `examples/lecture06/example_6_2_prograde_burn_at_perigee.py` (script).
+
+**Independent check.** The perigee must not move, and the formula for the tangential burn that moves the opposite apse must return 0.1 km/s.
+
+*Inspired by the worked examples in Curtis, *Orbital Mechanics for Engineering Students*. The statement and the numbers were written for this library.*
+
+### L6-3. The Oberth effect
+
+A spacecraft is on a geostationary transfer orbit with perigee altitude 400 km and apogee altitude 35786 km. Compare a prograde velocity change of 0.1 km/s applied at perigee and at apogee: the specific energy gained, and how far the opposite apse rises.
+
+**Given**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `perigee_altitude` | 400 | km |
+| `apogee_altitude` | 35786 | km |
+| `dv` | 0.1 | km/s |
+| `R` | 6378.137 | km |
+| `mu` | 398600.4418 | km^3/s^2 |
+
+**Results**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `v_perigee` | 10.06603 | km/s |
+| `v_apogee` | 1.618175 | km/s |
+| `energy_gain_perigee` | 1.011603 | km^2/s^2 |
+| `energy_gain_apogee` | 0.1668175 | km^2/s^2 |
+| `ratio` | 6.064132 | - |
+| `apogee_rise` | 6941.298 | km |
+| `perigee_rise` | 1023.434 | km |
+
+**Worked out in** `examples/lecture06/example_6_3_oberth_effect.ipynb` (notebook) and `examples/lecture06/example_6_3_oberth_effect.py` (script).
+
+**Independent check.** Each gain is recomputed as the difference of the specific energies of the orbits before and after the burn.
+
+*Inspired by the worked examples in Curtis, *Orbital Mechanics for Engineering Students*. The statement and the numbers were written for this library.*
+
+### L6-4. A burn with radial and normal components
+
+The spacecraft of problem L5-1 applies a velocity change with Hill components 0.05 km/s radial, 0 transverse and 0.2 km/s normal. Find the orbital elements after the burn.
+
+**Given**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `a` | 9500 | km |
+| `e` | 0.15 | - |
+| `i` | 52 | deg |
+| `raan` | 40 | deg |
+| `argp` | 110 | deg |
+| `f` | 75 | deg |
+| `mu` | 398600.4418 | km^3/s^2 |
+| `dv_H` | [0.05, 0, 0.2] | km/s |
+
+**Results**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `a` | 9531.218 | km |
+| `e` | 0.1576714 | - |
+| `i` | 50.32335 | deg |
+| `raan` | 39.80942 | deg |
+| `argp` | 109.7104 | deg |
+| `f` | 75.4091 | deg |
+
+**Worked out in** `examples/lecture06/example_6_4_burn_in_hill_components.ipynb` (notebook) and `examples/lecture06/example_6_4_burn_in_hill_components.py` (script).
+
+**Independent check.** The position is unchanged, and the change of the magnitude of the velocity follows from the three Hill components.
+
+*Inspired by the worked examples in Schaub and Junkins, *Analytical Mechanics of Space Systems*. The statement and the numbers were written for this library.*
+
+### L6-5. One impulse between two intersecting orbits
+
+A spacecraft on a circular orbit of radius 7000 km must move, with one impulse, onto a coplanar orbit with semi-major axis 8400 km and eccentricity 0.2. Check that the orbits intersect; at the crossing point where the new orbit is outbound find its true anomaly, the two speeds, the flight-path angle of the new orbit and the velocity change.
+
+**Given**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `r1` | 7000 | km |
+| `a2` | 8400 | km |
+| `e2` | 0.2 | - |
+| `mu` | 398600.4418 | km^3/s^2 |
+
+**Results**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `intersect` | yes |  |
+| `f2` | 40.5358 | deg |
+| `v1` | 7.546053 | km/s |
+| `v2` | 8.150669 | km/s |
+| `flight_path_angle_2` | 6.437676 | deg |
+| `dv` | 1.068277 | km/s |
+
+**Worked out in** `examples/lecture06/example_6_5_single_impulse.ipynb` (notebook) and `examples/lecture06/example_6_5_single_impulse.py` (script).
+
+**Independent check.** The velocity change is recomputed as the difference of the two velocity vectors at the common point.
+
+*Inspired by the worked examples in Curtis, *Orbital Mechanics for Engineering Students*. The statement and the numbers were written for this library.*
+
+### L6-6. Two impulses, three Keplerian arcs
+
+A spacecraft moves in one plane; the polar angle theta is measured from a fixed axis. It starts at theta = 215 degrees on a circular orbit of radius 8000 km. At theta = 360 degrees a first impulse puts it on an orbit with eccentricity 0.4 and argument of periapsis -40 degrees. At theta = 150 degrees a second impulse puts it on an orbit with eccentricity 0.2 and argument of periapsis 100 degrees, which it follows up to theta = 290 degrees. Find the two orbits, the two impulses in Hill components (radial, transverse, normal), their magnitudes, the times of the two burns and of the end, and the final state.
+
+**Given**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `r0` | 8000 | km |
+| `theta_start` | 215 | deg |
+| `e1` | 0.4 | - |
+| `argp1` | -40 | deg |
+| `theta_2` | 150 | deg |
+| `e2` | 0.2 | - |
+| `argp2` | 100 | deg |
+| `theta_end` | 290 | deg |
+| `mu` | 398600.4418 | km^3/s^2 |
+
+**Results**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `p1` | 10451.34 | km |
+| `a1` | 12442.07 | km |
+| `p2` | 19461.13 | km |
+| `a2` | 20272.01 | km |
+| `r_burn2` | 17244.25 | km |
+| `dv1_H` | [1.587853, 1.009296, 0] | km/s |
+| `dv2_H` | [1.122332, 1.364582, 0] | km/s |
+| `dv1` | 1.881477 | km/s |
+| `dv2` | 1.766837 | km/s |
+| `dv_total` | 3.648314 | km/s |
+| `t1` | 2868.213 | s |
+| `t2` | 9957.218 | s |
+| `t_end` | 22771.12 | s |
+| `r_end_N` | [8288.642, -22772.86, 0] | km |
+| `v_end_N` | [3.361371, 1.390702, 0] | km/s |
+
+**Worked out in** `examples/lecture06/example_6_6_two_impulses_three_arcs.ipynb` (notebook) and `examples/lecture06/example_6_6_two_impulses_three_arcs.py` (script).
+
+**Independent check.** The equation of motion is integrated numerically arc by arc: stop at each burn time, add the impulse to the velocity, restart. The final state must agree.
+
+*Inspired by the worked examples in Curtis, *Orbital Mechanics for Engineering Students*. The statement and the numbers were written for this library.*
+
+### L6-7. Propellant for a sequence of impulses
+
+A spacecraft of 1000 kg performs two impulses with the same engine, of specific impulse 320 s: first 2.397 km/s, then 1.456 km/s (the two impulses of a Hohmann transfer from low Earth orbit to the geostationary orbit). Find the propellant of each impulse, the mass after each, the total propellant, and the propellant that the second impulse would need if it were given first.
+
+**Given**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `m0` | 1000 | kg |
+| `isp` | 320 | s |
+| `dv1` | 2.397 | km/s |
+| `dv2` | 1.456 | km/s |
+| `g0` | 0.00980665 | km/s^2 |
+
+**Results**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `exhaust_velocity` | 3.138128 | km/s |
+| `propellant_1` | 534.1219 | kg |
+| `mass_after_1` | 465.8781 | kg |
+| `propellant_2` | 172.9424 | kg |
+| `final_mass` | 292.9357 | kg |
+| `propellant_total` | 707.0643 | kg |
+| `propellant_2_if_first` | 371.2181 | kg |
+
+**Worked out in** `examples/lecture06/example_6_7_propellant_for_two_impulses.ipynb` (notebook) and `examples/lecture06/example_6_7_propellant_for_two_impulses.py` (script).
+
+**Independent check.** The total must equal the propellant of one impulse equal to the sum of the two, and must not depend on their order.
+
+*Inspired by the worked examples in Curtis, *Orbital Mechanics for Engineering Students*. The statement and the numbers were written for this library.*
+
+### L6-8. Finite burn or impulse?
+
+A spacecraft on a circular orbit at 400 km altitude must raise its apoapsis to the geostationary radius. The velocity change is the one of the impulsive maneuver, but it is delivered by a burn of finite duration, along the velocity, with constant thrust acceleration, centred on the point where the impulse would be given. For burn times of 1, 5, 10 and 20 minutes find the fraction of the orbit flown during the burn, the apoapsis radius reached, and the equivalent loss of velocity change (from the orbital energy reached).
+
+**Given**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `altitude` | 400 | km |
+| `burn_minutes` | [1, 5, 10, 20] | min |
+| `sidereal_day` | 86164.1006372 | s |
+| `R` | 6378.137 | km |
+| `mu` | 398600.4418 | km^3/s^2 |
+
+**Results**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `dv` | 2.39747 | km/s |
+| `r_target` | 42164.2 | km |
+| `period_minutes` | 92.5604 | min |
+| `orbit_fraction_percent` | [1.08038, 5.40188, 10.8038, 21.6075] | % |
+| `apoapsis` | [42150.9, 41839, 40929, 38019.4] | km |
+| `dv_loss_percent` | [0.00864569, 0.213613, 0.82493, 2.92219] | % |
+
+**Worked out in** `examples/lecture06/example_6_8_finite_burn.ipynb` (notebook) and `examples/lecture06/example_6_8_finite_burn.py` (script).
+
+**Independent check.** The same burns are integrated with the fixed-step Runge-Kutta method of order 4 written out independently; a very short burn must return the impulsive result.
+
+*Inspired by the worked examples in Vallado, *Fundamentals of Astrodynamics and Applications*. The statement and the numbers were written for this library.*
+
+### L6-9. A radial impulse
+
+A spacecraft is on a circular orbit at 400 km altitude. An impulse of 0.1 km/s is applied radially outward. Find the new orbit: eccentricity, true anomaly of the maneuver point, semi-latus rectum, perigee and apogee altitudes, and the change of the semi-major axis.
+
+**Given**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `altitude` | 400 | km |
+| `dv_radial` | 0.1 | km/s |
+| `R` | 6378.137 | km |
+| `mu` | 398600.4418 | km^3/s^2 |
+
+**Results**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `v_circular` | 7.668558 | km/s |
+| `e` | 0.01304026 | - |
+| `f` | 90 | deg |
+| `p` | 6778.137 | km |
+| `perigee_altitude` | 312.7491 | km |
+| `apogee_altitude` | 489.5565 | km |
+| `a_change` | 1.152807 | km |
+
+**Worked out in** `examples/lecture06/example_6_9_radial_impulse.ipynb` (notebook) and `examples/lecture06/example_6_9_radial_impulse.py` (script).
+
+**Independent check.** The angular momentum does not change, so the semi-latus rectum equals the radius of the circle; the eccentricity equals the impulse divided by the circular speed.
+
+*Inspired by the worked examples in Curtis, *Orbital Mechanics for Engineering Students*. The statement and the numbers were written for this library.*
+
+### L6-10. Reboost of a space station
+
+A space station is on a circular orbit at 400 km altitude. (a) For one prograde impulse of 1 m/s find the change of the semi-major axis, at first order and exactly, the new eccentricity and the rise of the apogee. (b) Find the two impulses that raise the whole circular orbit by 2 km. (c) Compare the first-order formula with the exact change of the semi-major axis for prograde impulses of 1 m/s, 10 m/s, 100 m/s, 1 km/s and 2.397 km/s.
+
+**Given**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `altitude` | 400 | km |
+| `dv` | 0.001 | km/s |
+| `raise` | 2 | km |
+| `dv_table` | [0.001, 0.01, 0.1, 1, 2.397] | km/s |
+| `R` | 6378.137 | km |
+| `mu` | 398600.4418 | km^3/s^2 |
+
+**Results**
+
+| Quantity | Value | Unit |
+|---|---|---|
+| `mean_motion` | 0.001131367 | rad/s |
+| `period_minutes` | 92.5604 | min |
+| `a_change_first_order` | 1.767774 | km |
+| `a_change_exact` | 1.76835 | km |
+| `e_new` | 0.0002608222 | - |
+| `apogee_rise` | 3.5367 | km |
+| `raise_dv1` | 0.000565579 | km/s |
+| `raise_dv2` | 0.0005655373 | km/s |
+| `raise_dv_total` | 0.001131116 | km/s |
+| `table_a_change_exact` | [1.76835, 17.73555, 182.7266, 2607.395, 17678.72] | km |
+| `table_a_change_first_order` | [1.767774, 17.67774, 176.7774, 1767.774, 4237.353] | km |
+| `table_error_percent` | [-0.03260023, -0.325964, -3.255842, -32.20155, -76.03133] | % |
+
+**Worked out in** `examples/lecture06/example_6_10_reboost.ipynb` (notebook) and `examples/lecture06/example_6_10_reboost.py` (script).
+
+**Independent check.** The impulses are applied to the state and the orbits recomputed from it: semi-major axis and eccentricity after one impulse, and a circular orbit 2 km higher after the two.
+
+*Inspired by the worked examples in Schaub and Junkins, *Analytical Mechanics of Space Systems*. The statement and the numbers were written for this library.*

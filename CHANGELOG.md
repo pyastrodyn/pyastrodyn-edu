@@ -3,6 +3,18 @@
 All notable changes of PyAstroDyn-edu are listed here, the most recent first.
 Function names may still change before version 0.1.0.
 
+## 0.0.11 (November 2026)
+
+- Lecture 6 added, module `maneuvers`: rocket equation, impulsive burns,
+  single-impulse maneuvers, tangential impulses at the apses, burn of finite
+  duration, and the functions of the two-impulse coplanar transfers
+  (Hohmann, bi-elliptic), which are taught at the start of Lecture 7: their
+  example problems come with Lecture 7.
+- Ten example problems of Lecture 6 (`examples/lecture06`), each as a
+  script and as a notebook, and the notebook
+  `notebooks/Lecture06_maneuvers_1.ipynb`.
+- No change of the functions of Lectures 1 to 5.
+
 ## 0.0.10 (November 2026)
 
 - DOI of the library (all versions) added to the README and the citation file.

@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 548" width="680" height="548" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 692" width="680" height="692" role="img">
 <title>Map of the modules of PyAstroDyn-edu</title>
-<rect width="680" height="548" fill="#FFFFFF"/>
+<rect width="680" height="692" fill="#FFFFFF"/>
 <rect x="20" y="20" width="640" height="220" rx="10" fill="none" stroke="#888780" stroke-dasharray="5 4"/>
 <text x="40" y="44" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#2C2C2A">Part 1, Lectures 1 to 5: the two-body problem</text>
 <rect x="40" y="56" width="135" height="72" rx="8" fill="#EEEDFE" stroke="#534AB7"/>
@@ -32,27 +32,33 @@
 <text x="417.5" y="192" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#534AB7">Lecture 5</text>
 <text x="417.5" y="208" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#534AB7">2 functions</text>
 <rect x="20" y="256" width="640" height="128" rx="10" fill="none" stroke="#888780" stroke-dasharray="5 4"/>
-<text x="40" y="280" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#2C2C2A">Support, used in every lecture</text>
-<rect x="40" y="292" width="135" height="72" rx="8" fill="#F1EFE8" stroke="#5F5E5A"/>
-<text x="107.5" y="317" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#444441">constants</text>
-<text x="107.5" y="336" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">Values for the Earth</text>
-<text x="107.5" y="352" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">5 constants</text>
-<rect x="195" y="292" width="135" height="72" rx="8" fill="#F1EFE8" stroke="#5F5E5A"/>
-<text x="262.5" y="317" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#444441">units</text>
-<text x="262.5" y="336" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">Lecture 3, scaling</text>
-<text x="262.5" y="352" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">1 class</text>
-<rect x="350" y="292" width="135" height="72" rx="8" fill="#F1EFE8" stroke="#5F5E5A"/>
-<text x="417.5" y="317" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#444441">plotting</text>
-<text x="417.5" y="336" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">Figures of an orbit</text>
-<text x="417.5" y="352" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">2 functions</text>
+<text x="40" y="280" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#2C2C2A">Part 2: maneuvers</text>
+<rect x="40" y="292" width="135" height="72" rx="8" fill="#E1F5EE" stroke="#0F6E56"/>
+<text x="107.5" y="317" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#085041">maneuvers</text>
+<text x="107.5" y="336" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#0F6E56">Lecture 6</text>
+<text x="107.5" y="352" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#0F6E56">13 functions</text>
 <rect x="20" y="400" width="640" height="128" rx="10" fill="none" stroke="#888780" stroke-dasharray="5 4"/>
-<text x="40" y="424" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#2C2C2A">For reading and checking</text>
+<text x="40" y="424" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#2C2C2A">Support, used in every lecture</text>
 <rect x="40" y="436" width="135" height="72" rx="8" fill="#F1EFE8" stroke="#5F5E5A"/>
-<text x="107.5" y="461" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#444441">single_state</text>
-<text x="107.5" y="480" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">One-state versions</text>
-<text x="107.5" y="496" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">3 functions</text>
+<text x="107.5" y="461" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#444441">constants</text>
+<text x="107.5" y="480" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">Values for the Earth</text>
+<text x="107.5" y="496" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">5 constants</text>
 <rect x="195" y="436" width="135" height="72" rx="8" fill="#F1EFE8" stroke="#5F5E5A"/>
-<text x="262.5" y="461" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#444441">validation</text>
-<text x="262.5" y="480" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">Worked problems</text>
-<text x="262.5" y="496" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">16 problems</text>
+<text x="262.5" y="461" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#444441">units</text>
+<text x="262.5" y="480" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">Lecture 3, scaling</text>
+<text x="262.5" y="496" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">1 class</text>
+<rect x="350" y="436" width="135" height="72" rx="8" fill="#F1EFE8" stroke="#5F5E5A"/>
+<text x="417.5" y="461" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#444441">plotting</text>
+<text x="417.5" y="480" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">Figures of an orbit</text>
+<text x="417.5" y="496" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">2 functions</text>
+<rect x="20" y="544" width="640" height="128" rx="10" fill="none" stroke="#888780" stroke-dasharray="5 4"/>
+<text x="40" y="568" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#2C2C2A">For reading and checking</text>
+<rect x="40" y="580" width="135" height="72" rx="8" fill="#F1EFE8" stroke="#5F5E5A"/>
+<text x="107.5" y="605" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#444441">single_state</text>
+<text x="107.5" y="624" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">One-state versions</text>
+<text x="107.5" y="640" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">3 functions</text>
+<rect x="195" y="580" width="135" height="72" rx="8" fill="#F1EFE8" stroke="#5F5E5A"/>
+<text x="262.5" y="605" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="bold" fill="#444441">validation</text>
+<text x="262.5" y="624" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">Worked problems</text>
+<text x="262.5" y="640" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#5F5E5A">26 problems</text>
 </svg>

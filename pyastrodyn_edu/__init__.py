@@ -25,5 +25,9 @@ from .single_state import *  # noqa: F401,F403
 from .twobody import *  # noqa: F401,F403
 from .units import *  # noqa: F401,F403
 
+# --- Lecture 6: rocket equation and impulsive maneuvers ----------------------
+from . import maneuvers  # noqa: E402
+from .maneuvers import *  # noqa: F401,F403,E402
+
 # --- Version -----------------------------------------------------------------
-__version__ = "0.0.10"
+__version__ = "0.0.11"
