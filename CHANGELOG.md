@@ -3,6 +3,13 @@
 All notable changes of PyAstroDyn-edu are listed here, the most recent first.
 Function names may still change before version 0.1.0.
 
+## 0.0.13 (November 2026)
+
+- README, section 9: the use of AI is now disclosed with the line "AI use:
+  code-by-intent" and the DOI of the note that describes it
+  (https://doi.org/10.5281/zenodo.24626373).
+- No change of the functions and of the example problems.
+
 ## 0.0.12 (November 2026)
 
 - README corrected: the table "What is covered" and the first example no

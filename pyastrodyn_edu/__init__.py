@@ -30,4 +30,4 @@ from . import maneuvers  # noqa: E402
 from .maneuvers import *  # noqa: F401,F403,E402
 
 # --- Version -----------------------------------------------------------------
-__version__ = "0.0.12"
+__version__ = "0.0.13"

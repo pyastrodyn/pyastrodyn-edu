@@ -324,14 +324,15 @@ The citation details are also in `CITATION.cff`; GitHub shows them under
 
 ## 9. Use of AI
 
-The library was developed with a code-by-intent approach: the author defined
-the requirements and the physics, and directed and reviewed the work; an AI
-assistant (Claude, Anthropic) wrote the code, the documentation, the example
-problems and the notebooks. The physics is checked by automatic tests,
-including validation problems solved by two independent methods. The author
-decided and reviewed all of its content; as stated in the license, it is
-provided as is, without warranty or liability. It may still contain mistakes;
-please report them to the author.
+**AI use: code-by-intent (<https://doi.org/10.5281/zenodo.24626373>)**
+
+AI assistant: Claude (Anthropic). Under the direction and review of the
+author, it wrote the code, the documentation, the example problems and the notebooks. The
+physics is checked by automatic tests, including validation problems solved by
+two independent methods.
+
+As stated in the license, the library is provided as is, without warranty or
+liability. It may still contain mistakes; please report them to the author.
 
 ## Author
 
